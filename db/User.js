@@ -7,10 +7,19 @@ const User = sequelize.define('user', {
         allowNull: false,
         primaryKey: true
       },
-    email: Sequelize.STRING,
-    password: Sequelize.STRING,
+    email: {
+      type:Sequelize.STRING,
+      allowNull: false,
+    },
+    password: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
     location: Sequelize.INTEGER,
-    isAdmin: Sequelize.BOOLEAN
+    isAdmin: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false
+    }
   });
 
   module.exports = { User };

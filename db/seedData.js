@@ -2,20 +2,17 @@ const users = [
   {
     password: "brettpass",
     email: "brett@example.com",
-    location: 'Madrid',
-    isAdmin: false
+    location: 'Madrid'
   },
   {
     password: "headfirst",
     email: "keepyourheadonstraight@example.com",
-    location: 'London',
-    isAdmin: false
+    location: 'London'
   },
   {
     password: "scarykary",
     email: "dontbefrightened@example.com",
-    location: 'Argentina',
-    isAdmin: false
+    location: 'Argentina'
   }
 ]
 
