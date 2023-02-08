@@ -13,10 +13,10 @@ const User = sequelize.define('user', {
       allowNull: false,
       unique: true
     },
-    password: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
+    // password: {
+    //   type: Sequelize.STRING,
+    //   allowNull: false,
+    // },
     location: Sequelize.STRING,
     isAdmin: {
       type: Sequelize.BOOLEAN,
