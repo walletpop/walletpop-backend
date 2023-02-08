@@ -1,0 +1,18 @@
+classDiagram
+    User "1" o-- "*" Item
+
+    class Item {
+        +string name
+        +string description
+        +number price
+        +boolean isAvailable
+        +string picture
+        +string category
+    }
+
+    class User {
+        +string email
+        +string password
+        +string location
+        +boolean isAdmin
+    }
