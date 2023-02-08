@@ -10,7 +10,6 @@ const Item = sequelize.define('item', {
   name: {
     type: Sequelize.STRING,
     allowNull: false,
-    unique: true,
   },
   description: Sequelize.STRING,
   price: {
