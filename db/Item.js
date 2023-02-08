@@ -18,7 +18,7 @@ const Item = sequelize.define('item', {
   },
   isAvailable: {
     type: Sequelize.BOOLEAN,
-    default: true,
+    defaultValue: true,
   },
   picture: Sequelize.STRING,
   category: Sequelize.STRING,
