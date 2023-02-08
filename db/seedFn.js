@@ -1,9 +1,14 @@
-const {User, Item, sequelize} = require('./');
-const {users, items} = require('./seedData');
+const {sequelize} = require('./db');
+const {User, Item, SoldItem} = require('./');
+const {users, items, soldItems} = require('./seedData');
 
 const seed = async () => {
   try {
     await sequelize.sync({ force: true }); // recreate db
+    
+    await User.bulkCreate(users);
+    await SoldItem.bulkCreate(soldItems);
+    
     const createdUsers = await User.bulkCreate(users);
     const createdItems = await Item.bulkCreate(items);
 
