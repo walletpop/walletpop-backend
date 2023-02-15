@@ -11,7 +11,8 @@ const SoldItem = sequelize.define("soldItem", {
     },
     dateSold: {
         type: Sequelize.DATE,
-        allowNull: false
+        allowNull: false,
+        defaultValue: Sequelize.NOW
     }
 })
 
