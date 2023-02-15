@@ -13,8 +13,9 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
 //user endpoints
-const userRouter = require('./routes/user');
+const {userRouter, itemRouter } = require('./routes/');
 app.use('/user', userRouter);
+app.use('/item', itemRouter);
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
