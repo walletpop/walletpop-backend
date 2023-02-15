@@ -27,8 +27,6 @@ verifyToken = (req, res, next) => {
 isAdmin = async (req, res, next) => {
   try {
     const user = await User.findByPk(req.cookies.userId);
-    console.log(user);
-
     return user.isAdmin ? next() : res.status(403).send({
       message: "Require Admin Role!",
     });
