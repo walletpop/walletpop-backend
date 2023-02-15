@@ -91,6 +91,15 @@ app.get('/user/:id', async (req, res) => {
   }
 });
 
+app.get('/sold', async (req, res) => {
+  try {
+
+  } catch(error) {
+    return res.status(400).send({
+      message: error.message})
+  }
+})
+
 app.listen(PORT, () => {
     console.log(`walletpop are ready at http://localhost:${PORT}`);
   });
