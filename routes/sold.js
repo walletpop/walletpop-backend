@@ -3,8 +3,9 @@ const soldRouter = Router();
 const { User, Item, SoldItem } = require("../db");
 const {isAdmin} = require("../middleware/authJwt");
 soldRouter.use(isAdmin);
+const { SoldItem } = require('../db');
 
-soldRouter.get("/", async (req, res) => {
+soldRouter.get('/', async (req, res) => {
     try{
         const soldItems = await SoldItem.findAll({
             include: [
@@ -24,6 +25,7 @@ soldRouter.get("/", async (req, res) => {
     }
 });
 
+<<<<<<< HEAD
 soldRouter.get("/user/:buyer_id", async (req, res) => {
     try{
         const soldItems = await SoldItem.findAll({
@@ -61,6 +63,12 @@ soldRouter.delete("/:id", async (req, res) => {
         const item = await SoldItem.findByPk(req.params.id);
         const deletedSoldItem = await item.destroy();
         res.status(200).send("Sold item deleted successfully!");
+=======
+soldRouter.get('/user/:buyer_id', async (req, res) => {
+    try{
+        const itemsSoldByUser = await SoldItem.findAll({ where: {buyerId: req.params.buyer_id} });
+        res.status(200).send(itemsSoldByUser);
+>>>>>>> de2cfe4 (Endpoints to get all sold items and get sold items by buyer id)
     } catch (error){
         return res.status(500).send({ message: error.message });
     }
