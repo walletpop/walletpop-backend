@@ -2,15 +2,17 @@ const express = require('express');
 const {checkDuplicateUsernameOrEmail} = require('./middleware/checkUsernameDuplicate');
 const app = express();
 const { PORT = 3000 } = process.env;
-require('dotenv').config('.env');
+require('dotenv').config();
 const { User } = require('./db');
-const jwt = require("./middleware/authJwt");
+const jwt = require('jsonwebtoken');
 const bcrypt = require("bcryptjs");
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
-app.use(checkDuplicateUsernameOrEmail);
+const JWT_SECRET = process.env.JWT_SECRET;
+
+// app.use(checkDuplicateUsernameOrEmail);
 
 app.post('/signout', async(req, res) => {
   try {
@@ -24,7 +26,7 @@ app.post('/signout', async(req, res) => {
 });
 
 
-app.post('/register', async (req, res) => {
+app.post('/register',  async (req, res) => {
     // Save User to Database
     try {
       const user = await User.create({
@@ -41,7 +43,7 @@ app.post('/signin', async(req, res) => {
   try {
     const user = await User.findOne({
       where: {
-        username: req.body.username,
+        email: req.body.email,
       },
     });
 
@@ -60,11 +62,11 @@ app.post('/signin', async(req, res) => {
       });
     }
 
-    const token = jwt.sign({ id: user.id }, config.secret, {
+    const token = jwt.sign({ id: user.id }, JWT_SECRET, {
       expiresIn: 86400, // 24 hours
     });
 
-    req.session.token = token;
+    req.session = token;
 
     return res.status(200).send({
       id: user.id,
