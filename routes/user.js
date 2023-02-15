@@ -3,9 +3,17 @@ const userRouter = Router();
 const { User } = require('../db');
 const {verifyToken, isAdmin} = require('../middleware/authJwt');
 userRouter.use(verifyToken);
-userRouter.use(isAdmin);
 
-userRouter.get('/', async (req, res) => {
+userRouter.get('/', isAdmin, async (req, res) => {
+    try{
+        const users = await User.findAll();
+        res.status(200).send(users);
+    } catch (e){
+        return res.status(500).send({ message: error.message });
+    }
+});
+
+userRouter.get('/userId', async (req, res) => {
     try{
         if(req.query.id){
             const user = await User.findByPk(req.query.id);
@@ -16,14 +24,14 @@ userRouter.get('/', async (req, res) => {
             }
             res.status(200).send(user);
         } else {
-            const users = await User.findAll();
-            res.status(200).send(users);
+            return res.status(400).send({
+                message: "Please, provide user Id"
+              });
         }
 
     } catch (e){
         return res.status(500).send({ message: error.message });
     }
-
-})
+});
 
 module.exports = userRouter;

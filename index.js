@@ -12,7 +12,6 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
-
 //user endpoints
 const userRouter = require('./routes/user');
 app.use('/user', userRouter);
@@ -35,20 +34,6 @@ app.post('/signout', async(req, res) => {
   } catch (err) {
     this.next(err);
   }
-});
-
-
-app.post('/register',  async (req, res) => {
-    // Save User to Database
-    try {
-      const user = await User.create({
-        email: req.body.email,
-        password: bcrypt.hashSync(req.body.password, 8)
-      });
-      res.send({ message: "User registered successfully! Please signin now!" });
-    } catch (error) {
-      res.status(500).send({ message: error.message });
-    }
 });
 
 app.post('/signin', async(req, res) => {
@@ -88,6 +73,19 @@ app.post('/signin', async(req, res) => {
     });
   } catch (error) {
     return res.status(500).send({ message: error.message });
+  }
+});
+
+app.post('/register', checkDuplicateUsernameOrEmail,  async (req, res) => {
+  // Save User to Database
+  try {
+    const user = await User.create({
+      email: req.body.email,
+      password: bcrypt.hashSync(req.body.password, 8)
+    });
+    res.send({ message: "User registered successfully! Please signin now!" });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
   }
 });
 
