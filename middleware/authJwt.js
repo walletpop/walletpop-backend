@@ -5,17 +5,13 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 verifyToken = (req, res, next) => {
 
-  let token = req.headers.authorization;
+  let token = req.cookies.token;
 
   if (!token) {
     return res.status(403).send({
       message: "No token provided!",
     });
-  } else {
-    token = token.split(" ")[1];
   }
-
-  console.log(token);
 
   jwt.verify(token, JWT_SECRET, (err, decoded) => {
     if (err) {
@@ -23,14 +19,15 @@ verifyToken = (req, res, next) => {
         message: "Unauthorized!",
       });
     }
-    req.userId = decoded.id;
+    res.cookie('userId',decoded.id);
     next();
   });
 };
 
 isAdmin = async (req, res, next) => {
   try {
-    const user = await User.findByPk(req.userId);
+    const user = await User.findByPk(req.cookies.userId);
+    console.log(user);
 
     return user.isAdmin ? next() : res.status(403).send({
       message: "Require Admin Role!",
