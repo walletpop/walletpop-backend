@@ -11,3 +11,4 @@ to seed database and create default users
 ```
 npm run seed
 ```
+

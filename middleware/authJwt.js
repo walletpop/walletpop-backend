@@ -4,7 +4,8 @@ const {db, User} = require ('../db');
 const JWT_SECRET = process.env.JWT_SECRET;
 
 verifyToken = (req, res, next) => {
-  let token = req.session.token;
+
+  let token = req.cookies.token;
 
   if (!token) {
     return res.status(403).send({
@@ -18,15 +19,14 @@ verifyToken = (req, res, next) => {
         message: "Unauthorized!",
       });
     }
-    req.userId = decoded.id;
+    res.cookie('userId',decoded.id);
     next();
   });
 };
 
 isAdmin = async (req, res, next) => {
   try {
-    const user = await User.findByPk(req.userId);
-
+    const user = await User.findByPk(req.cookies.userId);
     return user.isAdmin ? next() : res.status(403).send({
       message: "Require Admin Role!",
     });
