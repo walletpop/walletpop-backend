@@ -13,10 +13,10 @@ userRouter.get('/', isAdmin, async (req, res) => {
     }
 });
 
-userRouter.get('/userId', async (req, res) => {
+userRouter.get('/:id', async (req, res) => {
     try{
-        if(req.query.id){
-            const user = await User.findByPk(req.query.id);
+        if(req.params.id){
+            const user = await User.findByPk(req.params.id);
             if (!user) {
               return res.status(400).send({
                 message: "Failed! User not found!"
