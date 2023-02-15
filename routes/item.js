@@ -8,7 +8,7 @@ itemRouter.get('/', async (req, res) => {
     try{
         const allItems = await Item.findAll();
         res.status(200).send(allItems);
-    } catch (e){
+    } catch (error){
         return res.status(500).send({ message: error.message });
     }
 
@@ -23,7 +23,7 @@ itemRouter.get('/:item_id', async (req, res) => {
           });
         }
         res.status(200).send(item);
-      }catch(e){
+      }catch(error){
         return res.status(500).send({ message: error.message });
       }
 });
@@ -32,7 +32,7 @@ itemRouter.get('/user/:user_id', async (req, res) => {
   try{
       const userItems = await Item.findAll({where: {ownerId: req.params.user_id}});
       res.status(200).send(userItems);
-    }catch(e){
+    }catch(error){
       return res.status(500).send({ message: error.message });
     }
 });
@@ -59,7 +59,21 @@ itemRouter.put('/:item_id', async (req, res) => {
       }else {
         res.status(400).send("You are not the owner of that item. You can not modify this item.");
       }
-    }catch(e){
+    }catch(error){
+      return res.status(500).send({ message: error.message });
+    }
+});
+
+itemRouter.delete('/:item_id', async (req, res) => {
+  try{
+      const item = await Item.findByPk(req.params.item_id);
+      if (item.ownerId === req.cookies.userId) {
+        await item.destroy();
+        res.status(200).send("Item deleted successfully.");
+      }else {
+        res.status(400).send("You are not the owner of that item. You can not modify this item.");
+      }
+    }catch(error){
       return res.status(500).send({ message: error.message });
     }
 });
