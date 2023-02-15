@@ -80,17 +80,16 @@ itemRouter.delete('/:item_id', async (req, res) => {
     }
 });
 
-itemRouter.get('/filter/:name?/:category?', async (req, res) => {
+itemRouter.get('/items/filter', async (req, res) => {
   try {
     const items = await Item.findAll({
       where: {
         [Op.or]: [
-          { name: `${req.params.name || ""}` },
-          { category: `${req.params.category || ""}` },
+          { name: `${req.query.name || ""}` },
+          { category: `${req.query.category || ""}` },
         ],
       },
     });
-      console.log(items);
       res.status(200).send(items);
   } catch (error) {
     return res.status(500).send({ message: error.message });
