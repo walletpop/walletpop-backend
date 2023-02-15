@@ -1,16 +1,23 @@
 const {Router} = require("express");
-const userRouter = Router();
+const soldRouter = Router();
 const { SoldItem } = require('../db');
-const {verifyToken, isAdmin} = require('../middleware/authJwt');
-userRouter.use(verifyToken);
 
-userRouter.get('/', async (req, res) => {
+soldRouter.get('/', async (req, res) => {
     try{
         const soldItems = await SoldItem.findAll();
         res.status(200).send(soldItems);
-    } catch (e){
+    } catch (error){
         return res.status(500).send({ message: error.message });
     }
 });
 
-module.exports = userRouter;
+soldRouter.get('/user/:buyer_id', async (req, res) => {
+    try{
+        const itemsSoldByUser = await SoldItem.findAll({ where: {buyerId: req.params.buyer_id} });
+        res.status(200).send(itemsSoldByUser);
+    } catch (error){
+        return res.status(500).send({ message: error.message });
+    }
+});
+
+module.exports = soldRouter;
