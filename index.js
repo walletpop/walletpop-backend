@@ -7,8 +7,11 @@ const { User } = require('./db');
 const jwt = require('jsonwebtoken');
 const bcrypt = require("bcryptjs");
 
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
+
 
 //user endpoints
 const userRouter = require('./routes/user');
@@ -16,14 +19,19 @@ app.use('/user', userRouter);
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
-// app.use(checkDuplicateUsernameOrEmail);
-
 app.post('/signout', async(req, res) => {
   try {
-    req.session = null;
-    return res.status(200).send({
+    cookie = req.cookies;
+    for (var prop in cookie) {
+        if (!cookie.hasOwnProperty(prop)) {
+            continue;
+        }
+        res.cookie(prop, '', {expires: new Date(0)});
+    }
+      return res.status(200).send({
       message: "You've been signed out!"
     });
+    res.end();
   } catch (err) {
     this.next(err);
   }
@@ -35,9 +43,9 @@ app.post('/register',  async (req, res) => {
     try {
       const user = await User.create({
         email: req.body.email,
-        password: bcrypt.hashSync(req.body.password, 8),
+        password: bcrypt.hashSync(req.body.password, 8)
       });
-      res.send({ message: "User registered successfully!" });
+      res.send({ message: "User registered successfully! Please signin now!" });
     } catch (error) {
       res.status(500).send({ message: error.message });
     }
@@ -70,9 +78,8 @@ app.post('/signin', async(req, res) => {
       expiresIn: 86400, // 24 hours
     });
 
-    console.log(token);
-
-    req.session = token;
+    res.cookie('token',token);
+    res.cookie('userId',user.id);
 
     return res.status(200).send({
       id: user.id,
