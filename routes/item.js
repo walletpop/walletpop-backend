@@ -1,6 +1,8 @@
 const {Router} = require("express");
 const itemRouter = Router();
 const { User, Item } = require('../db');
+var Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 const {verifyToken, isAdmin} = require('../middleware/authJwt');
 itemRouter.use(verifyToken);
 
@@ -76,6 +78,24 @@ itemRouter.delete('/:item_id', async (req, res) => {
     }catch(error){
       return res.status(500).send({ message: error.message });
     }
+});
+
+itemRouter.get('/filter/:name?/:category?', async (req, res) => {
+  try {
+    const items = await Item.findAll({
+      where: {
+        [Op.or]: [
+          { name: `${req.params.name || ""}` },
+          { category: `${req.params.category || ""}` },
+        ],
+      },
+    });
+      console.log(items);
+      res.status(200).send(items);
+  } catch (error) {
+    return res.status(500).send({ message: error.message });
+  }
+
 });
 
 module.exports = itemRouter;
