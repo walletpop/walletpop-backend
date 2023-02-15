@@ -10,6 +10,10 @@ const bcrypt = require("bcryptjs");
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
+//user endpoints
+const userRouter = require('./routes/user');
+app.use('/user', userRouter);
+
 const JWT_SECRET = process.env.JWT_SECRET;
 
 // app.use(checkDuplicateUsernameOrEmail);
@@ -66,27 +70,16 @@ app.post('/signin', async(req, res) => {
       expiresIn: 86400, // 24 hours
     });
 
+    console.log(token);
+
     req.session = token;
 
     return res.status(200).send({
       id: user.id,
       email: user.email,
+      token,
     });
   } catch (error) {
-    return res.status(500).send({ message: error.message });
-  }
-});
-
-app.get('/user/:id', async (req, res) => {
-  try{
-    const user = await User.findByPk(req.params.id);
-    if (!user) {
-      return res.status(400).send({
-        message: "Failed! User not found!"
-      });
-    }
-    res.status(200).send(user);
-  }catch(e){
     return res.status(500).send({ message: error.message });
   }
 });
