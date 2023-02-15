@@ -4,13 +4,18 @@ const {db, User} = require ('../db');
 const JWT_SECRET = process.env.JWT_SECRET;
 
 verifyToken = (req, res, next) => {
-  let token = req.session.token;
+
+  let token = req.headers.authorization;
 
   if (!token) {
     return res.status(403).send({
       message: "No token provided!",
     });
+  } else {
+    token = token.split(" ")[1];
   }
+
+  console.log(token);
 
   jwt.verify(token, JWT_SECRET, (err, decoded) => {
     if (err) {
