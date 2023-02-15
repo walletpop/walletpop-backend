@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
-const config = require("./auth.config");
-const db = require("../db");
-const { User } = require('../db');
+const {db, User} = require ('../db');
+
+const JWT_SECRET = process.env.JWT_SECRET;
 
 verifyToken = (req, res, next) => {
   let token = req.session.token;
@@ -12,7 +12,7 @@ verifyToken = (req, res, next) => {
     });
   }
 
-  jwt.verify(token, config.secret, (err, decoded) => {
+  jwt.verify(token, JWT_SECRET, (err, decoded) => {
     if (err) {
       return res.status(401).send({
         message: "Unauthorized!",
