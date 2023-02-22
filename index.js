@@ -11,7 +11,6 @@ const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
-app.use(checkIfEmailOrPasswordIsMissing);
 
 //user endpoints
 const {userRouter, itemRouter, soldRouter} = require('./routes/');
@@ -38,6 +37,8 @@ app.post('/signout', async(req, res) => {
     this.next(err);
   }
 });
+
+app.use(checkIfEmailOrPasswordIsMissing);
 
 app.post('/signin', async(req, res) => {
   try {
