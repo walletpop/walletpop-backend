@@ -10,6 +10,18 @@ describe("users endpoint", () => {
     await seed();
   });
 
+  async function createAndLogin() {
+    const registerResponse = await request(app).post("/register").send({ email: "lorena@test.com", password: "test123"});
+    expect(registerResponse.statusCode).toBe(200);
+
+    const loginResponse = await request(app).post("/signin").send({ email: "lorena@test.com", password: "test123"});
+
+    expect(loginResponse.statusCode).toBe(200);
+    expect(loginResponse.body).toHaveProperty('id', 'email', 'token');
+
+    return loginResponse;
+  }
+
   describe("POST /register", () => {
     test("Successfull register", async () => {
       const { statusCode, text } = await request(app).post("/register").send({ email: "lorena@test.com", password: "test123"});
@@ -54,8 +66,8 @@ describe("users endpoint", () => {
 
   describe("POST /signout", () => {
     test("Successfull signout", async () => {
-      const firstRegister = await request(app).post("/register").send({ email: "lorena@test.com", password: "test123"});
-      const signin = await request(app).post("/signin").send({ email: "lorena@test.com", password: "test123"});
+      await createAndLogin();
+
       const {statusCode, body, headers} = await request(app).post("/signout");
 
       expect(statusCode).toBe(200);
@@ -72,8 +84,7 @@ describe("users endpoint", () => {
     });
 
     test("Error if user is not admin", async () => {
-      const firstRegister = await request(app).post("/register").send({ email: "lorena@test.com", password: "test123"});
-      const {headers} = await request(app).post("/signin").send({ email: "lorena@test.com", password: "test123"});
+      const { headers } = await createAndLogin();
       const { statusCode, body } = await request(app).get("/user").set('Cookie', headers['set-cookie']);
 
       expect(statusCode).toBe(403);
@@ -81,8 +92,7 @@ describe("users endpoint", () => {
     });
 
     test("success if user is admin", async () => {
-      const firstRegister = await request(app).post("/register").send({ email: "lorena@test.com", password: "test123", isAdmin: true});
-      const {headers} = await request(app).post("/signin").send({ email: "lorena@test.com", password: "test123"});
+      const { headers } = await createAndLogin();
       const { statusCode, body } = await request(app).get("/user").set('Cookie', headers['set-cookie']);
 
       // expect(statusCode).toBe(200);
@@ -92,8 +102,7 @@ describe("users endpoint", () => {
 
   describe("GET /user/:id", () => {
     test("Success if user is logged", async () => {
-      const firstRegister = await request(app).post("/register").send({ email: "lorena@test.com", password: "test123", isAdmin: true});
-      const signin = await request(app).post("/signin").send({ email: "lorena@test.com", password: "test123"});
+      const signin = await createAndLogin();
       const { statusCode, body } = await request(app).get(`/user/${signin.body.id}`).set('Cookie', signin.headers['set-cookie']);
 
       console.log(body)
@@ -103,8 +112,7 @@ describe("users endpoint", () => {
     });
 
     test("Error if user id is not found", async () => {
-      const firstRegister = await request(app).post("/register").send({ email: "lorena@test.com", password: "test123", isAdmin: true});
-      const signin = await request(app).post("/signin").send({ email: "lorena@test.com", password: "test123"});
+      const signin = await createAndLogin();
       const { statusCode, body } = await request(app).get(`/user/123`).set('Cookie', signin.headers['set-cookie']);
 
       console.log(body)
