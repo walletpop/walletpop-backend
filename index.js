@@ -1,5 +1,6 @@
 const express = require('express');
 const {checkDuplicateUsernameOrEmail} = require('./middleware/checkUsernameDuplicate');
+const {checkIfEmailOrPasswordIsMissing} = require('./middleware/checkIfEmailOrPasswordIsMissing');
 const app = express();
 const { PORT = 3000 } = process.env;
 require('dotenv').config();
@@ -11,6 +12,7 @@ const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
+app.use(checkIfEmailOrPasswordIsMissing);
 
 //user endpoints
 const {userRouter, itemRouter, soldRouter} = require('./routes/');
