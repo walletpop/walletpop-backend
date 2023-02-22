@@ -2,7 +2,7 @@ const {Router} = require("express");
 const soldRouter = Router();
 const { User, Item, SoldItem } = require("../db");
 const {isAdmin} = require("../middleware/authJwt");
-soldRouter.use(isAdmin);
+//soldRouter.use(isAdmin);
 
 soldRouter.get("/", async (req, res) => {
     try{
@@ -40,6 +40,18 @@ soldRouter.get("/user/:buyer_id", async (req, res) => {
             ]
         });
         res.status(200).send(soldItems);
+    } catch (error){
+        return res.status(500).send({ message: error.message });
+    }
+});
+
+soldRouter.post("/", async (req, res) => {
+    try{
+        const {dateSold, itemId, buyerId} = req.body;
+        const newSoldItem = await SoldItem.create({dateSold});
+        await newSoldItem.setItem(itemId);
+        await newSoldItem.setBuyer(buyerId);
+        res.status(200).send(newSoldItem);
     } catch (error){
         return res.status(500).send({ message: error.message });
     }
