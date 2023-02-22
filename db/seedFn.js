@@ -17,8 +17,8 @@ const seed = async () => {
       const user = createdUsers[i];
       await user.addItem(item);
 
-      const soldItem = await item.createSoldItem()
-      await soldItem.setUser(createdUsers[i + 1]);
+      const soldItem = await item.createSoldItem();
+      await soldItem.setBuyer(createdUsers[i + 1]);
     }
   } catch (error) {
     console.error(error);
