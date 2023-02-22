@@ -8,7 +8,9 @@ itemRouter.use(verifyToken);
 
 itemRouter.get('/', async (req, res) => {
     try{
-        const allItems = await Item.findAll();
+        const allItems = await Item.findAll({
+          include: [{model: User}]
+        });
         res.status(200).send(allItems);
     } catch (error){
         return res.status(500).send({ message: error.message });
@@ -18,7 +20,7 @@ itemRouter.get('/', async (req, res) => {
 
 itemRouter.get('/:item_id', async (req, res) => {
     try{
-        const item = await Item.findByPk(req.params.item_id);
+        const item = await Item.findByPk(req.params.item_id, {include: [{model: User}]});
         if (!item) {
           return res.status(400).send({
             message: "Failed! Item not found!"
