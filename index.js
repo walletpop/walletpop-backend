@@ -1,7 +1,6 @@
 const express = require('express');
 const {checkDuplicateUsernameOrEmail} = require('./middleware/checkUsernameDuplicate');
 const app = express();
-const { PORT = 3000 } = process.env;
 require('dotenv').config();
 const { User } = require('./db');
 const jwt = require('jsonwebtoken');
@@ -91,6 +90,4 @@ app.post('/register', checkDuplicateUsernameOrEmail,  async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-    console.log(`walletpop are ready at http://localhost:${PORT}`);
-  });
+module.exports = app;
