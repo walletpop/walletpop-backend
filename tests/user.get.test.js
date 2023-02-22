@@ -15,7 +15,6 @@ describe("users endpoint", () => {
     expect(registerResponse.statusCode).toBe(200);
 
     const loginResponse = await request(app).post("/signin").send({ email: "lorena@test.com", password: "test123"});
-
     expect(loginResponse.statusCode).toBe(200);
     expect(loginResponse.body).toHaveProperty('id', 'email', 'token');
 
