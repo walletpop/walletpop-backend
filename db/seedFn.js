@@ -1,15 +1,16 @@
 const {sequelize} = require('./db');
 const {User, Item, SoldItem} = require('./');
 const {users, items} = require('./seedData');
+const bcrypt = require("bcryptjs");
 
 const seed = async () => {
   try {
     await sequelize.sync({ force: true }); // recreate db
 
-    //await User.bulkCreate(users);
-    //await SoldItem.bulkCreate(soldItems);
+    for(let i = 0; i<users.length; i++){
+      await User.create({email: users[i].email, password: bcrypt.hashSync(users[i].password, 8)})
+    }
 
-    const createdUsers = await User.bulkCreate(users);
     const createdItems = await Item.bulkCreate(items);
 
     for(let i=0; i<createdItems.length; ++i){
