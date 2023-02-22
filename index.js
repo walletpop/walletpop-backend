@@ -82,7 +82,9 @@ app.post('/register', checkDuplicateUsernameOrEmail,  async (req, res) => {
   try {
     const user = await User.create({
       email: req.body.email,
-      password: bcrypt.hashSync(req.body.password, 8)
+      password: bcrypt.hashSync(req.body.password, 8),
+      location: req.body.location,
+      isAdmin: req.body.isAdmin
     });
     res.send({ message: "User registered successfully! Please signin now!" });
   } catch (error) {
