@@ -7,8 +7,10 @@ const seed = async () => {
   try {
     await sequelize.sync({ force: true }); // recreate db
 
+    const createdUsers = [];
+
     for(let i = 0; i<users.length; i++){
-      await User.create({email: users[i].email, password: bcrypt.hashSync(users[i].password, 8)})
+      createdUsers.push(await User.create({email: users[i].email, password: bcrypt.hashSync(users[i].password, 8)}));
     }
 
     const createdItems = await Item.bulkCreate(items);
