@@ -4,7 +4,7 @@ const { User, Item, SoldItem } = require("../db");
 const {isAdmin} = require("../middleware/authJwt");
 soldRouter.use(isAdmin);
 
-soldRouter.get("/", async (req, res) => {
+soldRouter.get('/', async (req, res) => {
     try{
         const soldItems = await SoldItem.findAll({
             include: [
@@ -61,6 +61,7 @@ soldRouter.delete("/:id", async (req, res) => {
         const item = await SoldItem.findByPk(req.params.id);
         const deletedSoldItem = await item.destroy();
         res.status(200).send("Sold item deleted successfully!");
+
     } catch (error){
         return res.status(500).send({ message: error.message });
     }

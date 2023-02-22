@@ -2,7 +2,6 @@ const express = require('express');
 const {checkDuplicateUsernameOrEmail} = require('./middleware/checkUsernameDuplicate');
 const {checkIfEmailOrPasswordIsMissing} = require('./middleware/checkIfEmailOrPasswordIsMissing');
 const app = express();
-const { PORT = 3000 } = process.env;
 require('dotenv').config();
 const { User } = require('./db');
 const jwt = require('jsonwebtoken');
@@ -12,7 +11,6 @@ const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
-app.use(checkIfEmailOrPasswordIsMissing);
 
 //user endpoints
 const {userRouter, itemRouter, soldRouter} = require('./routes/');
@@ -39,6 +37,8 @@ app.post('/signout', async(req, res) => {
     this.next(err);
   }
 });
+
+app.use(checkIfEmailOrPasswordIsMissing);
 
 app.post('/signin', async(req, res) => {
   try {
@@ -93,6 +93,4 @@ app.post('/register', checkDuplicateUsernameOrEmail,  async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-    console.log(`walletpop are ready at http://localhost:${PORT}`);
-  });
+module.exports = app;
