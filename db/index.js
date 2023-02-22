@@ -10,9 +10,7 @@ Item.hasOne(SoldItem, {foreignKey: 'itemId'});
 SoldItem.belongsTo(Item, {foreignKey: 'itemId'});
 
 User.hasMany(SoldItem, {foreignKey: 'buyerId'})
-SoldItem.belongsTo(User, {foreignKey: 'buyerId'});
-
-
+SoldItem.belongsTo(User, {as: 'buyer', foreignKey: 'buyerId'});
 
 module.exports = {
     User,
