@@ -99,4 +99,29 @@ itemRouter.get('/items/filter', async (req, res) => {
 
 });
 
+itemRouter.get('/items/pagination', async (req, res) => {
+  const pageSize = req.query.pageSize ? req.query.pageSize : 10;
+  try{
+
+    const page = req.query.page;
+    const total = await Item.findAndCountAll({
+      limit: pageSize,
+      offset: (page - 1) * pageSize,
+    });
+
+    const totalPages = Math.ceil(total.count / pageSize);
+
+    if(page > totalPages || page <= 0){
+      res.status(500).send({ message: 'No results for the page entered. Please try with different page!'});
+    } else {
+      res.status(200).json({'result': total.rows, 'result count': total.rows.length,'current page': page, 'total pages': totalPages});
+    }
+
+    } catch(error){
+      return res.status(500).send({ message: error.message });
+    }
+  });
+
+
+
 module.exports = itemRouter;
