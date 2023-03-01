@@ -2,12 +2,15 @@ const express = require('express');
 const {checkDuplicateUsernameOrEmail} = require('./middleware/checkUsernameDuplicate');
 const {checkIfEmailOrPasswordIsMissing} = require('./middleware/checkIfEmailOrPasswordIsMissing');
 const app = express();
+var cors = require('cors')
+const { PORT = 3000 } = process.env;
 require('dotenv').config();
-const { User } = require('./db');
+const { User, Item } = require('./db');
 const jwt = require('jsonwebtoken');
 const bcrypt = require("bcryptjs");
 
 const cookieParser = require('cookie-parser');
+app.use(cors())
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
@@ -19,6 +22,55 @@ app.use('/item', itemRouter);
 app.use('/sold', soldRouter);
 
 const JWT_SECRET = process.env.JWT_SECRET;
+
+app.get('/items', async (req, res) => {
+  try{
+      const allItems = await Item.findAll();
+      res.status(200).send(allItems);
+  } catch (error){
+      return res.status(500).send({ message: error.message });
+  }
+
+});
+
+app.get('/items/filter', async (req, res) => {
+  try {
+    const items = await Item.findAll({
+      where: {
+        [Op.or]: [
+          { name: `${req.query.name || ""}` },
+          { category: `${req.query.category || ""}` },
+        ],
+      },
+    });
+      res.status(200).send(items);
+  } catch (error) {
+    return res.status(500).send({ message: error.message });
+  }
+
+});
+
+app.get('/items/pagination', async (req, res) => {
+  const pageSize = req.query.pageSize ? req.query.pageSize : 10;
+  try{
+    const page = req.query.page;
+    const total = await Item.findAndCountAll({
+      limit: pageSize,
+      offset: (page - 1) * pageSize,
+    });
+
+    const totalPages = Math.ceil(total.count / pageSize);
+
+    if(page > totalPages || page <= 0){
+      res.status(500).send({ message: 'No results for the page entered. Please try with different page!'});
+    } else {
+      res.status(200).json({'result': total.rows, 'result_count': total.rows.length,'current_page': page, 'total_pages': totalPages});
+    }
+
+    } catch(error){
+      return res.status(500).send({ message: error.message });
+    }
+  });
 
 app.post('/signout', async(req, res) => {
   try {
