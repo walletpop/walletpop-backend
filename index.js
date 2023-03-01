@@ -72,6 +72,20 @@ app.get('/items/pagination', async (req, res) => {
     }
   });
 
+  app.get('/:item_id', async (req, res) => {
+    try{
+        const item = await Item.findByPk(req.params.item_id);
+        if (!item) {
+          return res.status(400).send({
+            message: "Failed! Item not found!"
+          });
+        }
+        res.status(200).send(item);
+      }catch(error){
+        return res.status(500).send({ message: error.message });
+      }
+});
+
 app.post('/signout', async(req, res) => {
   try {
     cookie = req.cookies;
