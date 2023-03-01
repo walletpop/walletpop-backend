@@ -64,7 +64,7 @@ app.get('/items/pagination', async (req, res) => {
     if(page > totalPages || page <= 0){
       res.status(500).send({ message: 'No results for the page entered. Please try with different page!'});
     } else {
-      res.status(200).json({'result': total.rows, 'result count': total.rows.length,'current page': page, 'total pages': totalPages});
+      res.status(200).json({'result': total.rows, 'result_count': total.rows.length,'current_page': page, 'total_pages': totalPages});
     }
 
     } catch(error){
