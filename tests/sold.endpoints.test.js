@@ -23,8 +23,8 @@ describe("sold items endpoints", () => {
     describe("GET /sold", () => {
         test("Return all sold items", async () => {
             const signin = await registerAndLogin();
-            const {statusCode, body} = await (await request(app)
-            .get("/sold"))
+            const {statusCode, body} = await request(app)
+            .get("/sold")
             .set("Cookie", signin.headers["set-cookie"]);
 
             expect(statusCode).toBe(200);
@@ -38,7 +38,7 @@ describe("sold items endpoints", () => {
         });
 
         test("Return error if user is not admin", async () => {
-            const signin = await createAndLogin();
+            const signin = await registerAndLogin();
             const { statusCode, body } = await request(app)
             .get("/sold")
             .set("Cookie", signin.headers["set-cookie"]);
@@ -48,7 +48,7 @@ describe("sold items endpoints", () => {
         });
 
         test("Return error if admin role can't be confirmed", async () => {
-            const signin = await createAndLogin();
+            const signin = await registerAndLogin();
             const { statusCode, body } = await request(app)
             .get("/sold")
             .set("Cookie", signin.headers["set-cookie"]);
@@ -76,7 +76,7 @@ describe("sold items endpoints", () => {
         });
 
         test("Return error if correct user is not logged in", async () => {
-            const signin = await createAndLogin();
+            const signin = await registerAndLogin();
             const { statusCode, body } = await request(app)
             .get("/sold")
             .set("Cookie", signin.headers["set-cookie"]);
@@ -86,7 +86,7 @@ describe("sold items endpoints", () => {
         });
 
         test("Return error if user is not admin", async () => {
-            const signin = await createAndLogin();
+            const signin = await registerAndLogin();
             const { statusCode, body } = await request(app)
             .get("/sold")
             .set("Cookie", signin.headers["set-cookie"]);
@@ -96,7 +96,7 @@ describe("sold items endpoints", () => {
         });
 
         test("Return error if admin role can't be confirmed", async () => {
-            const signin = await createAndLogin();
+            const signin = await registerAndLogin();
             const { statusCode, body } = await request(app)
             .get("/sold")
             .set("Cookie", signin.headers["set-cookie"]);
@@ -128,7 +128,7 @@ describe("sold items endpoints", () => {
         });
 
         test("Return error if user is not admin", async () => {
-            const signin = await createAndLogin();
+            const signin = await registerAndLogin();
             const { statusCode, body } = await request(app)
             .get("/sold")
             .set("Cookie", signin.headers["set-cookie"]);
@@ -138,7 +138,7 @@ describe("sold items endpoints", () => {
         });
 
         test("Return error if admin role can't be confirmed", async () => {
-            const signin = await createAndLogin();
+            const signin = await registerAndLogin();
             const { statusCode, body } = await request(app)
             .get("/sold")
             .set("Cookie", signin.headers["set-cookie"]);
@@ -168,7 +168,7 @@ describe("sold items endpoints", () => {
         });
 
         test("Return error if user is not admin", async () => {
-            const signin = await createAndLogin();
+            const signin = await registerAndLogin();
             const { statusCode, body } = await request(app)
             .get("/sold")
             .set("Cookie", signin.headers["set-cookie"]);
@@ -178,7 +178,7 @@ describe("sold items endpoints", () => {
         });
 
         test("Return error if admin role can't be confirmed", async () => {
-            const signin = await createAndLogin();
+            const signin = await registerAndLogin();
             const { statusCode, body } = await request(app)
             .get("/sold")
             .set("Cookie", signin.headers["set-cookie"]);
@@ -238,7 +238,7 @@ describe("sold items endpoints", () => {
         });
 
         test("Return error if user is not admin", async () => {
-            const signin = await createAndLogin();
+            const signin = await registerAndLogin();
             const { statusCode, body } = await request(app)
             .get("/sold")
             .set("Cookie", signin.headers["set-cookie"]);
@@ -248,7 +248,7 @@ describe("sold items endpoints", () => {
         });
 
         test("Return error if admin role can't be confirmed", async () => {
-            const signin = await createAndLogin();
+            const signin = await registerAndLogin();
             const { statusCode, body } = await request(app)
             .get("/sold")
             .set("Cookie", signin.headers["set-cookie"]);
