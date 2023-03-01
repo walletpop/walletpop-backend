@@ -10,7 +10,7 @@ describe("sold items endpoints", () => {
         });
 
     async function registerAndLogin() {
-        const registerResponse = await request(app).post("/register").send({ email: "test@mail.com", password: "testpassword"});
+        const registerResponse = await request(app).post("/register").send({ email: "test@mail.com", password: "testpassword", isAdmin: 1});
         expect(registerResponse.statusCode).toBe(200);
 
         const loginResponse = await request(app).post("/signin").send({ email: "test@mail.com", password: "testpassword"});
@@ -62,7 +62,7 @@ describe("sold items endpoints", () => {
         test("Return a user's sold items", async () => {
             const signin = await registerAndLogin();
             const {statusCode, body} = await request(app)
-            .get(`/sold/user/${buyer_id}`)
+            .get(`/sold/user/${user_id}`)
             .set("Cookie", signin.headers["set-cookie"]);
 
             expect(statusCode).toBe(200);
