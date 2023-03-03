@@ -104,7 +104,6 @@ describe("users endpoint", () => {
       const signin = await createAndLogin();
       const { statusCode, body } = await request(app).get(`/user/${signin.body.id}`).set('Cookie', signin.headers['set-cookie']);
 
-      console.log(body)
       expect(statusCode).toBe(200);
       expect(body).toMatchObject({ id: signin.body.id});
       expect(body).toHaveProperty('id', 'password', 'email', 'location', 'isAdmin');
@@ -114,7 +113,6 @@ describe("users endpoint", () => {
       const signin = await createAndLogin();
       const { statusCode, body } = await request(app).get(`/user/123`).set('Cookie', signin.headers['set-cookie']);
 
-      console.log(body)
       expect(statusCode).toBe(400);
       expect(body).toMatchObject({ message: "Failed! User not found!"});
     });
