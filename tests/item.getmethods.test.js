@@ -55,7 +55,7 @@ describe("item endpoints", () => {
   });
 
   describe("GET /user/:user_id", () => {
-    test("Successfull return all items", async () => {
+    test("Successfull return all user items", async () => {
       const user = { email: "lorena@test.com", password: "test123" };
       const signin = await registerAndLogin(user);
       const { statusCode, body } = await request(app)
@@ -76,7 +76,7 @@ describe("item endpoints", () => {
   });
 
   describe("GET /item/filter", () => {
-    test("Successfull return all items", async () => {
+    test("Successfull return all items by filter", async () => {
       const query = "?category=home";
       const { statusCode, body } = await request(app)
         .get(`/items/filter${query}`)

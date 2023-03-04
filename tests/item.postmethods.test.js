@@ -22,7 +22,7 @@ describe("item endpoints", () => {
   }
 
   describe("POST /item", () => {
-    test("Successfull return all items", async () => {
+    test("Successful create an item to sell", async () => {
       const item = {name: "Hand cream" , price: 5, category: "cosmetic"};
       const user = { email: "lorena@test.com", password: "test123"}
       const signin = await registerAndLogin(user);
