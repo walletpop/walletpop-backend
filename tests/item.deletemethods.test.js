@@ -23,11 +23,11 @@ describe("item endpoints", () => {
       const item = {name: "Hand cream" , price: 5, category: "cosmetic"};
       const user = { email: "lorena@test.com", password: "test123"}
       const signin = await registerAndLogin(user);
-      const createItem = await request(app).post(`/item`).send(item).set('Cookie', signin.headers['set-cookie']);
+      const createItem = await request(app).post(`/items`).send(item).set('Cookie', signin.headers['set-cookie']);
       expect(createItem.statusCode).toBe(200);
       expect(createItem.body).toMatchObject(item)
 
-      const {statusCode, body} = await request(app).delete(`/item/${createItem.body.id}`).set('Cookie', signin.headers['set-cookie']);
+      const {statusCode, body} = await request(app).delete(`/items/${createItem.body.id}`).set('Cookie', signin.headers['set-cookie']);
       expect(statusCode).toBe(200);
       expect(body).toMatchObject({message: "Item deleted successfully."})
     })
@@ -36,9 +36,9 @@ describe("item endpoints", () => {
       const item = {name: "Hand cream" , price: 5, category: "cosmetic"};
       const user = { email: "lorena@test.com", password: "test123"}
       const signin = await registerAndLogin(user);
-      const createItem = await request(app).post(`/item`).send(item).set('Cookie', signin.headers['set-cookie']);
+      const createItem = await request(app).post(`/items`).send(item).set('Cookie', signin.headers['set-cookie']);
 
-      const {statusCode, body} = await request(app).delete(`/item/${createItem.body.id}`)
+      const {statusCode, body} = await request(app).delete(`/items/${createItem.body.id}`)
 
       expect(statusCode).toBe(403);
       expect(body).toMatchObject({ message:"No token provided!" });
@@ -52,9 +52,9 @@ describe("item endpoints", () => {
       const user2 = { email: "ana@test.com", password: "test123"}
       const signinUser2 = await registerAndLogin(user2);
 
-      const createItem = await request(app).post(`/item`).send(item).set('Cookie', signinUser2.headers['set-cookie']);
+      const createItem = await request(app).post(`/items`).send(item).set('Cookie', signinUser2.headers['set-cookie']);
 
-      const {statusCode, body} = await request(app).delete(`/item/${createItem.body.id}`).set('Cookie', signinUser1.headers['set-cookie']);
+      const {statusCode, body} = await request(app).delete(`/items/${createItem.body.id}`).set('Cookie', signinUser1.headers['set-cookie']);
 
       expect(statusCode).toBe(400);
       expect(body).toMatchObject({ message:"You are not the owner of that item. You can not modify this item." });

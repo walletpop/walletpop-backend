@@ -1,24 +1,9 @@
 const {Router} = require("express");
 const itemRouter = Router();
 const { User, Item } = require('../db');
-var Sequelize = require('sequelize');
-const Op = Sequelize.Op;
 const {verifyToken, isAdmin} = require('../middleware/authJwt');
 itemRouter.use(verifyToken);
 
-itemRouter.get('/:item_id', async (req, res) => {
-    try{
-        const item = await Item.findByPk(req.params.item_id, {include: [{model: User}]});
-        if (!item) {
-          return res.status(400).send({
-            message: "Failed! Item not found!"
-          });
-        }
-        res.status(200).send(item);
-      }catch(error){
-        return res.status(500).send({ message: error.message });
-      }
-});
 
 itemRouter.get('/user/:user_id', async (req, res) => {
   try{
