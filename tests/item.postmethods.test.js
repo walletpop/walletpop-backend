@@ -26,7 +26,7 @@ describe("item endpoints", () => {
       const item = {name: "Hand cream" , price: 5, category: "cosmetic"};
       const user = { email: "lorena@test.com", password: "test123"}
       const signin = await registerAndLogin(user);
-      const { statusCode, body } = await request(app).post(`/item`).send(item).set('Cookie', signin.headers['set-cookie']);
+      const { statusCode, body } = await request(app).post(`/items`).send(item).set('Cookie', signin.headers['set-cookie']);
 
       expect(statusCode).toBe(200);
       expect(body).toMatchObject(item)
@@ -36,7 +36,7 @@ describe("item endpoints", () => {
       const item = {name: "Hand cream"};
       const user = { email: "lorena@test.com", password: "test123"}
       const signin = await registerAndLogin(user);
-      const { statusCode, body } = await request(app).post(`/item`).send(item).set('Cookie', signin.headers['set-cookie']);
+      const { statusCode, body } = await request(app).post(`/items`).send(item).set('Cookie', signin.headers['set-cookie']);
 
       expect(statusCode).toBe(500);
       expect(body).toMatchObject({ message:"notNull Violation: item.price cannot be null" })
@@ -46,7 +46,7 @@ describe("item endpoints", () => {
       const item = {price: 4};
       const user = { email: "lorena@test.com", password: "test123"}
       const signin = await registerAndLogin(user);
-      const { statusCode, body } = await request(app).post(`/item`).send(item).set('Cookie', signin.headers['set-cookie']);
+      const { statusCode, body } = await request(app).post(`/items`).send(item).set('Cookie', signin.headers['set-cookie']);
 
       expect(statusCode).toBe(500);
       expect(body).toMatchObject({ message:"notNull Violation: item.name cannot be null" })
@@ -56,7 +56,7 @@ describe("item endpoints", () => {
       const item = {name: "hand cream", price: 4};
       const user = { email: "lorena@test.com", password: "test123"}
       const signin = await registerAndLogin(user);
-      const { statusCode, body } = await request(app).post(`/item`).send(item);
+      const { statusCode, body } = await request(app).post(`/items`).send(item);
 
       expect(statusCode).toBe(403);
       expect(body).toMatchObject({ message:"No token provided!" });

@@ -8,6 +8,7 @@ require('dotenv').config();
 const { User, Item } = require('./db');
 const jwt = require('jsonwebtoken');
 const bcrypt = require("bcryptjs");
+const { Op } = require('sequelize');
 
 const cookieParser = require('cookie-parser');
 app.use(cors())
@@ -17,9 +18,6 @@ app.use(express.urlencoded({extended:true}));
 
 //user endpoints
 const {userRouter, itemRouter, soldRouter} = require('./routes/');
-app.use('/user', userRouter);
-app.use('/item', itemRouter);
-app.use('/sold', soldRouter);
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -72,7 +70,7 @@ app.get('/items/pagination', async (req, res) => {
     }
   });
 
-  app.get('/:item_id', async (req, res) => {
+  app.get('/items/:item_id', async (req, res) => {
     try{
         const item = await Item.findByPk(req.params.item_id);
         if (!item) {
@@ -103,6 +101,10 @@ app.post('/signout', async(req, res) => {
     this.next(err);
   }
 });
+
+app.use('/user', userRouter);
+app.use('/items', itemRouter);
+app.use('/sold', soldRouter);
 
 app.use(checkIfEmailOrPasswordIsMissing);
 
@@ -151,7 +153,8 @@ app.post('/register', checkDuplicateUsernameOrEmail,  async (req, res) => {
   try {
     const user = await User.create({
       email: req.body.email,
-      password: bcrypt.hashSync(req.body.password, 8)
+      password: bcrypt.hashSync(req.body.password, 8),
+      isAdmin: req.body.isAdmin
     });
     res.send({ message: "User registered successfully! Please signin now!" });
   } catch (error) {

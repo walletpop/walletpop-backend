@@ -19,13 +19,10 @@ describe("item endpoints", () => {
     return loginResponse;
   }
 
-  describe("GET /item", () => {
+  describe("GET /items", () => {
     test("Successfull return all items", async () => {
-      const user = { email: "lorena@test.com", password: "test123" };
-      const signin = await registerAndLogin(user);
       const { statusCode, body } = await request(app)
-        .get("/item")
-        .set("Cookie", signin.headers["set-cookie"]);
+        .get("/items")
 
       expect(statusCode).toBe(200);
       expect(Array.isArray(body)).toBe(true);
@@ -38,36 +35,14 @@ describe("item endpoints", () => {
         expect(element).toHaveProperty("category");
       });
     });
-
-    test("Error returning item data if user hasn't logged in", async () => {
-      const user = { email: "lorena@test.com", password: "test123" };
-      const signin = await registerAndLogin(user);
-      const { statusCode, body } = await request(app).get("/item");
-
-      expect(statusCode).toBe(403);
-      expect(body).toMatchObject({ message: "No token provided!" });
-    });
-
-    test("Error if token is wrong", async () => {
-      const user = { email: "lorena@test.com", password: "test123" };
-      const signin = await registerAndLogin(user);
-      const { statusCode, body } = await request(app)
-        .get("/item")
-        .set("Cookie", ["token=123", "userId=123"]);
-
-      expect(statusCode).toBe(401);
-      expect(body).toMatchObject({ message: "Unauthorized!" });
-    });
   });
 
-  describe("GET /item/:id", () => {
+  describe("GET /items/:id", () => {
     test("Successfull return all items", async () => {
-      const user = { email: "lorena@test.com", password: "test123" };
-      const signin = await registerAndLogin(user);
       const item = await Item.findOne();
+      console.log(item.id);
       const { statusCode, body } = await request(app)
-        .get(`/item/${item.id}`)
-        .set("Cookie", signin.headers["set-cookie"]);
+        .get(`/items/${item.id}`)
 
       expect(statusCode).toBe(200);
       expect(body).toHaveProperty("id");
@@ -84,7 +59,7 @@ describe("item endpoints", () => {
       const user = { email: "lorena@test.com", password: "test123" };
       const signin = await registerAndLogin(user);
       const { statusCode, body } = await request(app)
-        .get(`/item/user/${signin.body.id}`)
+        .get(`/items/user/${signin.body.id}`)
         .set("Cookie", signin.headers["set-cookie"]);
 
       expect(statusCode).toBe(200);
@@ -102,12 +77,9 @@ describe("item endpoints", () => {
 
   describe("GET /item/filter", () => {
     test("Successfull return all items", async () => {
-      const user = { email: "lorena@test.com", password: "test123" };
-      const signin = await registerAndLogin(user);
       const query = "?category=home";
       const { statusCode, body } = await request(app)
-        .get(`/item/items/filter${query}`)
-        .set("Cookie", signin.headers["set-cookie"]);
+        .get(`/items/filter${query}`)
 
       expect(statusCode).toBe(200);
       expect(Array.isArray(body)).toBe(true);
