@@ -23,16 +23,12 @@ soldRouter.get('/', async (req, res) => {
     }
 });
 
-soldRouter.get("/user/:buyer_id", async (req, res) => {
+soldRouter.get("/:id", async (req, res) => {
     try{
-        const user = await User.findByPk(req.cookies.userId);
-        const soldItem = await SoldItem.findAll({
-            where: {
-                buyerId: user.id
-            }
-        });
+        const user = await User.findByPk(req.cookies.userId)
+        const soldItem = await SoldItem.findByPk(req.params.id);
 
-        if (user.isAdmin || user.id == req.params.buyer_id) {
+        if (user.isAdmin || soldItem.buyerId == req.cookies.userId) {
             res.status(200).send(soldItem);
         } else {
             return res.status(401).send({ message: "Unauthorized!" })
@@ -62,7 +58,9 @@ soldRouter.post("/", async (req, res) => {
 
 soldRouter.delete("/:id", isAdmin, async (req, res) => {
     try{
+        console.log(req.params.id);
         const item = await SoldItem.findByPk(req.params.id);
+        console.log(item);
         await item.destroy();
         res.status(200).send("Sold item deleted successfully!");
 
