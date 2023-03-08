@@ -45,6 +45,18 @@ soldRouter.get("/user/:buyer_id", async (req, res) => {
     }
 });
 
+soldRouter.post("/", async (req, res) => {
+    try{
+        const {dateSold, itemId, buyerId} = req.body;
+        const newSoldItem = await SoldItem.create({dateSold});
+        await newSoldItem.setItem(itemId);
+        await newSoldItem.setBuyer(buyerId);
+        res.status(200).send(newSoldItem);
+    } catch (error){
+        return res.status(500).send({ message: error.message });
+    }
+});
+
 soldRouter.put("/:id", async (req, res) => {
     try{
         const item = await SoldItem.findByPk(req.params.id);
