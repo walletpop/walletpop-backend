@@ -21,7 +21,7 @@ describe("item endpoints", () => {
     return loginResponse;
   }
 
-  describe("POST /item", () => {
+  describe("POST /items", () => {
     test("Successful create an item to sell", async () => {
       const item = {name: "Hand cream" , price: 5, category: "cosmetic"};
       const user = { email: "lorena@test.com", password: "test123"}

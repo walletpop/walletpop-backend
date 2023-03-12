@@ -19,7 +19,7 @@ describe("item endpoints", () => {
     return loginResponse;
   }
 
-  describe("PUT /item", () => {
+  describe("PUT /items", () => {
     test("Successfull update item", async () => {
       const item = {name: "Hand cream" , price: 5, category: "cosmetic"};
       const user = { email: "lorena@test.com", password: "test123"}
