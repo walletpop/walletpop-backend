@@ -1,0 +1,27 @@
+classDiagram
+    User "1" o-- "*" Item
+    User "1" o-- "*" SoldItem
+    Item "1" o-- "1" SoldItem
+
+    class Item {
+        +string name
+        +string description
+        +number price
+        +boolean isAvailable
+        +string picture
+        +string category
+        +string ownerId
+    }
+
+    class User {
+        +string email
+        +string password
+        +string location
+        +boolean isAdmin
+    }
+
+    class SoldItem {
+        +datatime dateSold
+        +sting itemId
+        +string buyerId
+    }
