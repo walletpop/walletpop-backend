@@ -1,5 +1,6 @@
 classDiagram
     User "1" o-- "*" Item
+    User "1" o-- "*" SoldItem
 
     class Item {
         +string name
@@ -15,4 +16,10 @@ classDiagram
         +string password
         +string location
         +boolean isAdmin
+    }
+
+    class SoldItem {
+        +datatime dateSold
+        +sting itemId
+        +string buyerId
     }
