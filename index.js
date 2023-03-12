@@ -2,16 +2,16 @@ const express = require('express');
 const {checkDuplicateUsernameOrEmail} = require('./middleware/checkUsernameDuplicate');
 const {checkIfEmailOrPasswordIsMissing} = require('./middleware/checkIfEmailOrPasswordIsMissing');
 const app = express();
-var cors = require('cors')
+const cors = require('cors')
 const { PORT = 3000 } = process.env;
 require('dotenv').config();
 const { User, Item } = require('./db');
 const jwt = require('jsonwebtoken');
 const bcrypt = require("bcryptjs");
 const { Op } = require('sequelize');
-
 const cookieParser = require('cookie-parser');
-app.use(cors())
+
+app.use(cors({ credentials: true, origin: 'http://localhost:3006' }));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
@@ -53,6 +53,7 @@ app.get('/items/pagination', async (req, res) => {
   try{
     const page = req.query.page;
     const total = await Item.findAndCountAll({
+      where: { isAvailable: true },
       limit: pageSize,
       offset: (page - 1) * pageSize,
     });

@@ -43,10 +43,11 @@ soldRouter.post("/", async (req, res) => {
     try{
         const {itemId, dateSold} = req.body;
         const item = await Item.findByPk(itemId);
+        item.update({isAvailable: false});
         let soldItem = null;
         if(dateSold) {
             soldItem = await item.createSoldItem({dateSold});
-        }else {
+        } else {
             soldItem = await item.createSoldItem();
         }
         await soldItem.setBuyer(req.cookies.userId);

@@ -75,7 +75,7 @@ describe("item endpoints", () => {
     });
   });
 
-  describe("GET /item/filter", () => {
+  describe("GET /items/filter", () => {
     test("Successfull return all items by filter", async () => {
       const query = "?category=home";
       const { statusCode, body } = await request(app)
